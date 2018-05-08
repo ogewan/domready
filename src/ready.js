@@ -1,13 +1,13 @@
 /*!
   * domready (c) Dustin Diaz 2014 - License MIT
   */
-!function (name, definition) {
+ domready=((definition) => {
 
-  if (typeof module != 'undefined') module.exports = definition()
-  else if (typeof define == 'function' && typeof define.amd == 'object') define(definition)
-  else this[name] = definition()
+  if (typeof module != 'undefined' && module.exports) module.exports = definition()
+  else if (typeof define == 'function' && define.amd == 'object') define(definition)
+  return definition();
 
-}('domready', function () {
+})(() => {
 
   var fns = [], listener
     , doc = typeof document === 'object' && document
@@ -17,13 +17,13 @@
 
 
   if (!loaded && doc)
-  doc.addEventListener(domContentLoaded, listener = function () {
+  doc.addEventListener(domContentLoaded, listener = () => {
     doc.removeEventListener(domContentLoaded, listener)
     loaded = 1
     while (listener = fns.shift()) listener()
   })
 
-  return function (fn) {
+  return fn => {
     loaded ? setTimeout(fn, 0) : fns.push(fn)
   }
 
